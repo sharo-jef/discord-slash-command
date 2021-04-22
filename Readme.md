@@ -10,19 +10,21 @@ npm i discord-slash-command
 import { builder } from 'discord-slash-command';
 const command = builder('cmd')
     .defaultPermission(true)
-    .description('bar')
-    .name('bry')
+    .description('foo')
     .options(options => {
         return options
-            .type(ApplicationCommandOptionType.SUB_COMMAND)
-            .name('foo')
-            .description('bar')
-            .choices(choices => {
-                return choices
-                    .choice(choice => {
-                        return choice
-                            .name('choice1')
-                            .value('choice1');
+            .option(option => {
+                return option
+                    .type(ApplicationCommandOptionType.SUB_COMMAND)
+                    .name('foo')
+                    .description('bar')
+                    .choices(choices => {
+                        return choices
+                            .choice(choice => {
+                                return choice
+                                    .name('choice1')
+                                    .value('choice1');
+                            });
                     });
             });
     })
@@ -30,20 +32,22 @@ const command = builder('cmd')
 /*
  * output
  *
- *   {
- *       "name": "bry",
- *       "description": "bar",
- *       "options": {
- *           "type": 1,
- *           "name": "foo",
- *           "description": "bar",
- *           "choices": [
- *               {
- *                   "name": "choice1",
- *                   "value": "choice1"
- *               }
- *           ]
- *       },
- *       "default_permission": true
- *   }
+ * {
+ *     "name": "cmd",
+ *     "description": "foo",
+ *     "options": [
+ *         {
+ *             "type": 1,
+ *             "name": "foo",
+ *             "description": "bar",
+ *             "choices": [
+ *                 {
+ *                     "name": "choice1",
+ *                     "value": "choice1"
+ *                 }
+ *             ]
+ *         }
+ *     ],
+ *     "default_permission": true
+ * }
 ```

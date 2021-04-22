@@ -14,12 +14,20 @@ export const ApplicationCommandOptionType = {
     ROLE: 8,
 };
 
+/**
+ * builder for discord slash command
+ * @param {string} name name
+ * @returns {CommandBuilder}
+ */
 export function builder(name) {
     const builder = new CommandBuilder(name);
     return builder;
 }
 
 export class CommandBuilder {
+    /**
+     * @type {ApplicationCommand}
+     */
     #command = null;
     /**
      * @param {string} name command name
@@ -44,7 +52,7 @@ export class CommandBuilder {
         return this;
     }
     /**
-     * @param {(options: ApplicationCommandOption)=>ApplicationCommandOption} options command options
+     * @param {(options: ApplicationCommandOptions)=>ApplicationCommandOptions} options command options
      * @return {CommandBuilder}
      */
     options(options) {
@@ -72,7 +80,7 @@ export class ApplicationCommand {
     #name = '';
     /** @type {string} */
     #description = '';
-    /** @type {ApplicationCommandOption} */
+    /** @type {ApplicationCommandOptions} */
     #options = null;
     /** @type {boolean} */
     #defaultPermission = true;
@@ -108,11 +116,11 @@ export class ApplicationCommand {
         return this;
     }
     /**
-     * @param {ApplicationCommandOption} options command options
+     * @param {(options:ApplicationCommandOptions) => ApplicationCommandOptions} options command options
      * @return {ApplicationCommand}
      */
     options(options) {
-        this.#options = options(new ApplicationCommandOption());
+        this.#options = options(new ApplicationCommandOptions());
         return this;
     }
     /**
@@ -144,6 +152,25 @@ export class ApplicationCommand {
             ret.default_permission = this.#defaultPermission;
         }
         return ret;
+    }
+}
+
+export class ApplicationCommandOptions {
+    /** @type {ApplicationCommandOption[]} */
+    #options = [];
+    /**
+     * @param {(option:ApplicationCommandOption) => ApplicationCommandOption} option option
+     * @return {ApplicationCommandOptions}
+     */
+    option(option) {
+        this.#options.push(option(new ApplicationCommandOption()));
+        return this;
+    }
+    /**
+     * @return {unknown[]}
+     */
+    get command() {
+        return this.#options.map(o => o.command);
     }
 }
 
@@ -211,11 +238,11 @@ export class ApplicationCommandOption {
         return this;
     }
     /**
-     * @param {(options: ApplicationCommandOption)=>ApplicationCommandOption} options command options
+     * @param {(options: ApplicationCommandOptions)=>ApplicationCommandOptions} options command options
      * @return {ApplicationCommandOption}
      */
     options(options) {
-        this.#options = options(new ApplicationCommandOption());
+        this.#options = options(new ApplicationCommandOptions());
         return this;
     }
     /**
