@@ -1,0 +1,30 @@
+{
+    "name": "discord-slash-command",
+    "version": "1.0.0",
+    "description": "Discord Slash Command generator for Node.js",
+    "main": "index.js",
+    "scripts": {
+        "start": "node -r dotenv/config ."
+    },
+    "keywords": [
+        "discord",
+        "slash-command",
+        "command"
+    ],
+    "author": "sharo-jef",
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/core": "^7.12.9",
+        "@babel/eslint-parser": "^7.12.1",
+        "@babel/plugin-proposal-class-properties": "^7.12.1",
+        "@babel/plugin-syntax-top-level-await": "^7.12.1",
+        "@babel/preset-env": "^7.12.1",
+        "@types/node": "^14.14.6",
+        "eslint": "^7.13.0"
+    },
+    "dependencies": {
+        "dotenv": "^8.2.0"
+    },
+    "type": "module",
+    "homepage": "https://github.com/sharo-jef"
+}
