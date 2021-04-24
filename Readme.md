@@ -7,7 +7,7 @@ npm i discord-slash-command
 
 ## Usage
 ```javascript
-import { builder } from 'discord-slash-command';
+import { ApplicationCommandOptionType, builder } from 'discord-slash-command';
 const command = builder('cmd')
     .defaultPermission(true)
     .description('foo')
