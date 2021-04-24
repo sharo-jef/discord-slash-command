@@ -50,4 +50,5 @@ const command = builder('cmd')
  *     ],
  *     "default_permission": true
  * }
+ */
 ```
