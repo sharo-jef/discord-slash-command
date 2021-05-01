@@ -1,10 +1,24 @@
+import { default as axios } from 'axios';
 import { StringResolvable } from 'discord.js';
+
 import { ApplicationCommandInteractionData, GuildMember, InteractionObject, InteractionReplyOptions, InteractionType, Snowflake, User } from './@types/index';
+
+export class InteractionFactory {
+    private token: string;
+    constructor(token: string) {
+        this.token = token;
+    }
+    create(interaction: InteractionObject): Interaction {
+        return new Interaction(interaction, this.token);
+    }
+}
 
 export class Interaction {
     interaction: InteractionObject;
-    constructor(interaction: InteractionObject) {
+    _token: string;
+    constructor(interaction: InteractionObject, token: string) {
         this.interaction = interaction;
+        this._token = token;
     }
     get id(): Snowflake {
         return this.interaction.id;
@@ -42,5 +56,11 @@ export class Interaction {
                 ? `<@${this.interaction?.member?.user?.id || this.interaction?.user?.id || 0}>, `
                 : ''
         }${content}`;
+        axios
+            .post(
+                `https://discord.com/api/v8/interactions/${this.interaction.id}/${this.interaction.token}/callback`,
+                { type: 4, data: { content: contentString } },
+                { headers: { Authorization: `Bot ${this._token}` } },
+            );
     }
 }
