@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 export enum ApplicationCommandOptionType {
-    SUBCOMMAND = 1,
+    SUB_COMMAND = 1,
     SUB_COMMAND_GROUP = 2,
     STRING = 3,
     INTEGER = 4,
@@ -111,15 +111,18 @@ export class ApplicationCommandOption {
     private _name: string;
     private _type: ApplicationCommandOptionType;
     private _description: string;
-    private _required: boolean;
+    private _required = false;
     private _choices: ApplicationCommandOptionChoices;
     private _options: ApplicationCommandOptions;
     constructor(name = '') {
         if (name) {
-            this._name = name;
+            this.name(name);
         }
     }
     name(name: string): ApplicationCommandOption {
+        if (!/^[\w-]{1,32}$/g.test(name)) {
+            throw new Error(`want: /^[\\w-]{1,32}$/, got: ${name}`);
+        }
         this._name = name;
         return this;
     }
