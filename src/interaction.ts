@@ -1,7 +1,17 @@
 import { default as axios } from 'axios';
 import { StringResolvable } from 'discord.js';
 
-import { ApplicationCommandInteractionData, GuildMember, InteractionObject, InteractionReplyOptions, InteractionType, Snowflake, User } from './@types/index';
+import {
+    ApplicationCommandInteractionData,
+    ApplicationCommandIntegrationDataOption,
+    GuildMember,
+    InteractionObject,
+    InteractionReplyOptions,
+    InteractionType,
+    Snowflake,
+    User,
+    ApplicationCommandOptionType,
+} from './@types/index';
 
 export class InteractionFactory {
     private token: string;
@@ -15,7 +25,7 @@ export class InteractionFactory {
 
 export class Interaction {
     interaction: InteractionObject;
-    _token: string;
+    private _token: string;
     constructor(interaction: InteractionObject, token: string) {
         this.interaction = interaction;
         this._token = token;
@@ -49,6 +59,22 @@ export class Interaction {
     }
     get version(): number {
         return this.interaction.version;
+    }
+    get toSimple(): unknown {
+        function parse(option: ApplicationCommandIntegrationDataOption): unknown {
+            const ret = {};
+            switch (option.type) {
+            case ApplicationCommandOptionType.SUB_COMMAND:
+            case ApplicationCommandOptionType.SUB_COMMAND_GROUP:
+                for (const o of option?.options?.map(o => parse(o)) as {name: string, value: string|number|boolean}[] || []) {
+                    ret[o.name] = o.value;
+                }
+                return ret || { name: option.name };
+            default:
+                return { name: option.name, value: option?.value };
+            }
+        }
+        return this.interaction.data.options?.map(o => parse(o));
     }
     async reply(content: StringResolvable, options: InteractionReplyOptions): Promise<void> {
         const contentString = `${

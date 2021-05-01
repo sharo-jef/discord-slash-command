@@ -1,10 +1,41 @@
 /* eslint-disable camelcase */
+
+import { StringResolvable } from 'discord.js';
+
 export type Snowflake = string;
+export class InteractionFactory {
+    private token: string;
+    constructor(token: string);
+    create(interaction: InteractionObject): Interaction;
+}
 export class Interaction {
+    interaction: InteractionObject;
+    private _token: string;
     /**
      * @param {InteractionObject} interaction interaction object
      */
     constructor(interaction: InteractionObject);
+    get id(): Snowflake;
+    get applicationId(): Snowflake;
+    get type(): InteractionType;
+    get data(): ApplicationCommandInteractionData;
+    get guildId(): Snowflake;
+    get channelId(): Snowflake;
+    get member(): GuildMember;
+    get user(): User;
+    get token(): string;
+    get version(): number;
+    reply(content: StringResolvable, options: InteractionReplyOptions): Promise<void>;
+}
+export enum ApplicationCommandOptionType {
+    SUB_COMMAND = 1,
+    SUB_COMMAND_GROUP = 2,
+    STRING = 3,
+    INTEGER = 4,
+    BOOLEAN = 5,
+    USER = 6,
+    CHANNEL = 7,
+    ROLE = 8,
 }
 export enum InteractionType {
     Ping = 1,
@@ -94,3 +125,62 @@ export type InteractionObject = {
 export type InteractionReplyOptions = {
     mention: boolean;
 };
+
+export function builder(name: string): CommandBuilder;
+
+export class CommandBuilder {
+    private _command: ApplicationCommand;
+    name(name: string): CommandBuilder;
+    description(description: string): CommandBuilder;
+    options(options: (options: ApplicationCommandOptions) => ApplicationCommandOptions): CommandBuilder;
+    defaultPermission(defaultPermission: boolean): CommandBuilder;
+    get command(): unknown;
+}
+
+export class ApplicationCommand {
+    private _name;
+    private _description;
+    private _options: ApplicationCommandOptions;
+    private _defaultPermission;
+    name(name: string): ApplicationCommand;
+    description(description: string): ApplicationCommand;
+    options(options: (options: ApplicationCommandOptions) => ApplicationCommandOptions): ApplicationCommand;
+    defaultPermission(defaultPermission: boolean): ApplicationCommand;
+    get command(): unknown;
+}
+
+export class ApplicationCommandOptions {
+    _options: ApplicationCommandOption[];
+    option(option: (option: ApplicationCommandOption) => ApplicationCommandOption): ApplicationCommandOptions;
+    get command(): unknown[];
+}
+
+export class ApplicationCommandOption {
+    private _name: string;
+    private _type: ApplicationCommandOptionType;
+    private _description: string;
+    private _required;
+    private _choices: ApplicationCommandOptionChoices;
+    private _options: ApplicationCommandOptions;
+    name(name: string): ApplicationCommandOption;
+    type(type: ApplicationCommandOptionType): ApplicationCommandOption;
+    description(description: string): ApplicationCommandOption;
+    required(required: boolean): ApplicationCommandOption;
+    choices(choices: (choices: ApplicationCommandOptionChoices) => ApplicationCommandOptionChoices): ApplicationCommandOption;
+    options(options: (options: ApplicationCommandOptions) => ApplicationCommandOptions): ApplicationCommandOption;
+    get command(): unknown;
+}
+
+export class ApplicationCommandOptionChoices {
+    private _choices: ApplicationCommandOptionChoice[];
+    choice(choice: (choice: ApplicationCommandOptionChoice) => ApplicationCommandOptionChoice): ApplicationCommandOptionChoices;
+    get command(): unknown[];
+}
+
+export class ApplicationCommandOptionChoice {
+    private _name: string;
+    private _value: string|number;
+    name(name: string): ApplicationCommandOptionChoice;
+    value(value: string|number): ApplicationCommandOptionChoice;
+    get command(): unknown;
+}

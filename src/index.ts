@@ -4,7 +4,6 @@ import {
     ApplicationCommandOption,
     ApplicationCommandOptionChoice,
     ApplicationCommandOptionChoices,
-    ApplicationCommandOptionType,
     ApplicationCommandOptions,
     CommandBuilder,
 } from './builder';
@@ -19,7 +18,6 @@ export {
     ApplicationCommandOption,
     ApplicationCommandOptionChoice,
     ApplicationCommandOptionChoices,
-    ApplicationCommandOptionType,
     ApplicationCommandOptions,
     CommandBuilder,
     Interaction,

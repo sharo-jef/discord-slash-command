@@ -1,15 +1,6 @@
 /* eslint-disable camelcase */
 
-export enum ApplicationCommandOptionType {
-    SUB_COMMAND = 1,
-    SUB_COMMAND_GROUP = 2,
-    STRING = 3,
-    INTEGER = 4,
-    BOOLEAN = 5,
-    USER = 6,
-    CHANNEL = 7,
-    ROLE = 8,
-}
+import { ApplicationCommandOptionType } from './@types';
 
 export function builder(name: string): CommandBuilder {
     const builder = new CommandBuilder(name);
@@ -97,7 +88,7 @@ export class ApplicationCommand {
 }
 
 export class ApplicationCommandOptions {
-    private _options: ApplicationCommandOption[] = [];
+    _options: ApplicationCommandOption[] = [];
     option(option: (option: ApplicationCommandOption) => ApplicationCommandOption): ApplicationCommandOptions {
         this._options.push(option(new ApplicationCommandOption()));
         return this;
