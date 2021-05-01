@@ -1,6 +1,6 @@
 {
     "name": "discord-slash-command",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Discord Slash Command generator for Node.js",
     "main": "./dist/index.js",
     "scripts": {
