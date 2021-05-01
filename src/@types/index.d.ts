@@ -1,5 +1,5 @@
-type Snowflake = string;
-
+/* eslint-disable camelcase */
+export type Snowflake = string;
 export class Interaction {
     /**
      * @param {InteractionObject} interaction interaction object
@@ -9,9 +9,7 @@ export class Interaction {
 export enum InteractionType {
     Ping = 1,
     ApplicationCommand = 2,
-};
-export type Snowflake = string;
-export type InteractionType = number;
+}
 export type ApplicationCommandInteractionData = {
     id: Snowflake;
     name: string;
@@ -21,8 +19,8 @@ export type ApplicationCommandInteractionData = {
 export type ApplicationCommandInteractionDataResolved = {
     users: unknown[];
     members: unknown[];
-    roles: unknown[],
-    channels: unknown[],
+    roles: unknown[];
+    channels: unknown[];
 };
 export type ApplicationCommandIntegrationDataOption = {
     name: string;
@@ -60,12 +58,12 @@ export enum UserFlags {
     BugHunterLevel2 = 1 << 14,
     VerifiedBot = 1 << 16,
     EarlyVerifiedBotDeveloper = 1 << 17,
-};
+}
 export enum PremiumTypes {
     None = 0,
     NitroClassic = 1,
     Nitro = 2,
-};
+}
 export type User = {
     id: Snowflake;
     username: string;
@@ -92,4 +90,7 @@ export type InteractionObject = {
     user: User;
     token: string;
     version: number;
+};
+export type InteractionReplyOptions = {
+    mention: boolean;
 };

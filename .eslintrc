@@ -1,24 +1,40 @@
 {
     "env": {
-        "node": true,
+        "browser": true,
         "es2021": true
     },
     "extends": [
         // "eslint:all",
-        "eslint:recommended"
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
-    "parser": "@babel/eslint-parser",
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 12,
-        "sourceType": "module",
-        "babelOptions": {
-            "configFile": "./.babelrc"
-        }
+        "sourceType": "module"
     },
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "rules": {
+        "@typescript-eslint/semi": [2, "always"],
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/type-annotation-spacing": [
+            2,
+            {
+                "before": false,
+                "after": true,
+                "overrides": {
+                    "arrow": {
+                        "before": true,
+                        "after": true
+                    }
+                }
+            }
+        ],
         "indent": [2, 4],
         "quotes": [2, "single", {"allowTemplateLiterals": true}],
-        "semi": [2, "always"],
+        "semi": "off", // typescriptを使用しない場合は [2, "always"]
         "keyword-spacing": [2, {"before": true, "after": true}],
         "eqeqeq": [2, "always"],
         "comma-spacing": [2, {"before": false, "after": true}],
@@ -45,7 +61,6 @@
             }
         ],
         "key-spacing": [2, {"beforeColon": false, "afterColon": true}],
-        "no-empty": [2, {"allowEmptyCatch": true}],
-        "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^_"}]
+        "no-empty": [2, {"allowEmptyCatch": true}]
     }
 }
