@@ -35,10 +35,10 @@
     },
     "exports": {
         ".": {
-            "default": "./index.js"
+            "default": "./dist/index.js"
         },
         "./builder": {
-            "default": "./builder.js"
+            "default": "./dist/builder.js"
         }
     },
     "type": "module",
