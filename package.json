@@ -3,6 +3,7 @@
     "version": "1.2.2",
     "description": "Discord Slash Command generator for Node.js",
     "main": "./dist/index.js",
+    "types": "./src/@types/index.d.ts",
     "scripts": {
         "build": "npx tsc"
     },

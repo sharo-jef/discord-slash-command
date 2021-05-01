@@ -1,7 +1,10 @@
+"use strict";
 /* eslint-disable camelcase */
-export var ApplicationCommandOptionType;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ApplicationCommandOptionChoice = exports.ApplicationCommandOptionChoices = exports.ApplicationCommandOption = exports.ApplicationCommandOptions = exports.ApplicationCommand = exports.CommandBuilder = exports.builder = exports.ApplicationCommandOptionType = void 0;
+var ApplicationCommandOptionType;
 (function (ApplicationCommandOptionType) {
-    ApplicationCommandOptionType[ApplicationCommandOptionType["SUBCOMMAND"] = 1] = "SUBCOMMAND";
+    ApplicationCommandOptionType[ApplicationCommandOptionType["SUB_COMMAND"] = 1] = "SUB_COMMAND";
     ApplicationCommandOptionType[ApplicationCommandOptionType["SUB_COMMAND_GROUP"] = 2] = "SUB_COMMAND_GROUP";
     ApplicationCommandOptionType[ApplicationCommandOptionType["STRING"] = 3] = "STRING";
     ApplicationCommandOptionType[ApplicationCommandOptionType["INTEGER"] = 4] = "INTEGER";
@@ -9,180 +12,223 @@ export var ApplicationCommandOptionType;
     ApplicationCommandOptionType[ApplicationCommandOptionType["USER"] = 6] = "USER";
     ApplicationCommandOptionType[ApplicationCommandOptionType["CHANNEL"] = 7] = "CHANNEL";
     ApplicationCommandOptionType[ApplicationCommandOptionType["ROLE"] = 8] = "ROLE";
-})(ApplicationCommandOptionType || (ApplicationCommandOptionType = {}));
-export function builder(name) {
-    const builder = new CommandBuilder(name);
+})(ApplicationCommandOptionType = exports.ApplicationCommandOptionType || (exports.ApplicationCommandOptionType = {}));
+function builder(name) {
+    var builder = new CommandBuilder(name);
     return builder;
 }
-export class CommandBuilder {
-    constructor(name) {
+exports.builder = builder;
+var CommandBuilder = /** @class */ (function () {
+    function CommandBuilder(name) {
         this._command = new ApplicationCommand(name);
     }
-    name(name) {
+    CommandBuilder.prototype.name = function (name) {
         this._command.name(name);
         return this;
-    }
-    description(description) {
+    };
+    CommandBuilder.prototype.description = function (description) {
         this._command.description(description);
         return this;
-    }
-    options(options) {
+    };
+    CommandBuilder.prototype.options = function (options) {
         this._command.options(options);
         return this;
-    }
-    defaultPermission(defaultPermission) {
+    };
+    CommandBuilder.prototype.defaultPermission = function (defaultPermission) {
         this._command.defaultPermission(defaultPermission);
         return this;
-    }
-    get command() {
-        return this._command.command;
-    }
-}
-export class ApplicationCommand {
-    constructor(name) {
+    };
+    Object.defineProperty(CommandBuilder.prototype, "command", {
+        get: function () {
+            return this._command.command;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return CommandBuilder;
+}());
+exports.CommandBuilder = CommandBuilder;
+var ApplicationCommand = /** @class */ (function () {
+    function ApplicationCommand(name) {
         this._name = '';
         this._description = '';
         this._defaultPermission = true;
         this.name(name);
         this._description = '';
     }
-    name(name) {
+    ApplicationCommand.prototype.name = function (name) {
         if (!/^[\w-]{1,32}$/g.test(name)) {
-            throw new Error(`want: /^[\\w-]{1,32}$/, got: ${name}`);
+            throw new Error("want: /^[\\w-]{1,32}$/, got: " + name);
         }
         this._name = name;
         return this;
-    }
-    description(description) {
+    };
+    ApplicationCommand.prototype.description = function (description) {
         this._description = description;
         return this;
-    }
-    options(options) {
+    };
+    ApplicationCommand.prototype.options = function (options) {
         this._options = options(new ApplicationCommandOptions());
         return this;
-    }
-    defaultPermission(defaultPermission) {
+    };
+    ApplicationCommand.prototype.defaultPermission = function (defaultPermission) {
         this._defaultPermission = defaultPermission;
         return this;
-    }
-    get command() {
-        if (!this._name) {
-            throw new Error('name is required');
-        }
-        if (!this._description) {
-            throw new Error('description is required');
-        }
-        const ret = {};
-        ret.name = this._name;
-        ret.description = this._description;
-        if (this._options) {
-            ret.options = this._options.command;
-        }
-        if (this._defaultPermission) {
-            ret.default_permission = this._defaultPermission;
-        }
-        return ret;
-    }
-}
-export class ApplicationCommandOptions {
-    constructor() {
+    };
+    Object.defineProperty(ApplicationCommand.prototype, "command", {
+        get: function () {
+            if (!this._name) {
+                throw new Error('name is required');
+            }
+            if (!this._description) {
+                throw new Error('description is required');
+            }
+            var ret = {};
+            ret.name = this._name;
+            ret.description = this._description;
+            if (this._options) {
+                ret.options = this._options.command;
+            }
+            if (this._defaultPermission) {
+                ret.default_permission = this._defaultPermission;
+            }
+            return ret;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ApplicationCommand;
+}());
+exports.ApplicationCommand = ApplicationCommand;
+var ApplicationCommandOptions = /** @class */ (function () {
+    function ApplicationCommandOptions() {
         this._options = [];
     }
-    option(option) {
+    ApplicationCommandOptions.prototype.option = function (option) {
         this._options.push(option(new ApplicationCommandOption()));
         return this;
-    }
-    get command() {
-        return this._options.map(o => o.command);
-    }
-}
-export class ApplicationCommandOption {
-    constructor(name = '') {
+    };
+    Object.defineProperty(ApplicationCommandOptions.prototype, "command", {
+        get: function () {
+            return this._options.map(function (o) { return o.command; });
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ApplicationCommandOptions;
+}());
+exports.ApplicationCommandOptions = ApplicationCommandOptions;
+var ApplicationCommandOption = /** @class */ (function () {
+    function ApplicationCommandOption(name) {
+        if (name === void 0) { name = ''; }
+        this._required = false;
         if (name) {
-            this._name = name;
+            this.name(name);
         }
     }
-    name(name) {
+    ApplicationCommandOption.prototype.name = function (name) {
+        if (!/^[\w-]{1,32}$/g.test(name)) {
+            throw new Error("want: /^[\\w-]{1,32}$/, got: " + name);
+        }
         this._name = name;
         return this;
-    }
-    type(type) {
+    };
+    ApplicationCommandOption.prototype.type = function (type) {
         this._type = type;
         return this;
-    }
-    description(description) {
+    };
+    ApplicationCommandOption.prototype.description = function (description) {
         this._description = description;
         return this;
-    }
-    required(required) {
+    };
+    ApplicationCommandOption.prototype.required = function (required) {
         this._required = required;
         return this;
-    }
-    choices(choices) {
+    };
+    ApplicationCommandOption.prototype.choices = function (choices) {
         this._choices = choices(new ApplicationCommandOptionChoices());
         return this;
-    }
-    options(options) {
+    };
+    ApplicationCommandOption.prototype.options = function (options) {
         this._options = options(new ApplicationCommandOptions());
         return this;
-    }
-    get command() {
-        if (!this._type) {
-            throw new Error('type is required');
-        }
-        if (!this._name) {
-            throw new Error('name is required');
-        }
-        if (!this._description) {
-            throw new Error('description is required');
-        }
-        const ret = {};
-        ret.type = this._type;
-        ret.name = this._name;
-        ret.description = this._description;
-        if (this._required) {
-            ret.required = this._required;
-        }
-        if (this._choices) {
-            ret.choices = this._choices.command;
-        }
-        if (this._options) {
-            ret.options = this._options.command;
-        }
-        return ret;
-    }
-}
-export class ApplicationCommandOptionChoices {
-    constructor() {
+    };
+    Object.defineProperty(ApplicationCommandOption.prototype, "command", {
+        get: function () {
+            if (!this._type) {
+                throw new Error('type is required');
+            }
+            if (!this._name) {
+                throw new Error('name is required');
+            }
+            if (!this._description) {
+                throw new Error('description is required');
+            }
+            var ret = {};
+            ret.type = this._type;
+            ret.name = this._name;
+            ret.description = this._description;
+            if (this._required) {
+                ret.required = this._required;
+            }
+            if (this._choices) {
+                ret.choices = this._choices.command;
+            }
+            if (this._options) {
+                ret.options = this._options.command;
+            }
+            return ret;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ApplicationCommandOption;
+}());
+exports.ApplicationCommandOption = ApplicationCommandOption;
+var ApplicationCommandOptionChoices = /** @class */ (function () {
+    function ApplicationCommandOptionChoices() {
         this._choices = [];
     }
-    choice(choice) {
+    ApplicationCommandOptionChoices.prototype.choice = function (choice) {
         this._choices.push(choice(new ApplicationCommandOptionChoice()));
         return this;
-    }
-    get command() {
-        return this._choices.map(c => c.command);
-    }
-}
-export class ApplicationCommandOptionChoice {
-    constructor(name = '') {
+    };
+    Object.defineProperty(ApplicationCommandOptionChoices.prototype, "command", {
+        get: function () {
+            return this._choices.map(function (c) { return c.command; });
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ApplicationCommandOptionChoices;
+}());
+exports.ApplicationCommandOptionChoices = ApplicationCommandOptionChoices;
+var ApplicationCommandOptionChoice = /** @class */ (function () {
+    function ApplicationCommandOptionChoice(name) {
+        if (name === void 0) { name = ''; }
         this._name = name;
     }
-    name(name) {
+    ApplicationCommandOptionChoice.prototype.name = function (name) {
         if (!/^[\w-]{1,32}$/g.test(name)) {
-            throw new Error(`want: /^[\\w-]{1,32}$/, got: ${name}`);
+            throw new Error("want: /^[\\w-]{1,32}$/, got: " + name);
         }
         this._name = name;
         return this;
-    }
-    value(value) {
+    };
+    ApplicationCommandOptionChoice.prototype.value = function (value) {
         this._value = value;
         return this;
-    }
-    get command() {
-        return {
-            name: this._name,
-            value: this._value,
-        };
-    }
-}
+    };
+    Object.defineProperty(ApplicationCommandOptionChoice.prototype, "command", {
+        get: function () {
+            return {
+                name: this._name,
+                value: this._value,
+            };
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ApplicationCommandOptionChoice;
+}());
+exports.ApplicationCommandOptionChoice = ApplicationCommandOptionChoice;
