@@ -42,6 +42,5 @@
             "default": "./dist/builder.js"
         }
     },
-    "type": "module",
     "homepage": "https://github.com/sharo-jef"
 }

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InteractionFactory = exports.Interaction = exports.CommandBuilder = exports.ApplicationCommandOptions = exports.ApplicationCommandOptionType = exports.ApplicationCommandOptionChoices = exports.ApplicationCommandOptionChoice = exports.ApplicationCommandOption = exports.ApplicationCommand = exports.builder = void 0;
-var builder_1 = require("./builder");
+const builder_1 = require("./builder");
 Object.defineProperty(exports, "builder", { enumerable: true, get: function () { return builder_1.builder; } });
 Object.defineProperty(exports, "ApplicationCommand", { enumerable: true, get: function () { return builder_1.ApplicationCommand; } });
 Object.defineProperty(exports, "ApplicationCommandOption", { enumerable: true, get: function () { return builder_1.ApplicationCommandOption; } });
@@ -10,6 +10,6 @@ Object.defineProperty(exports, "ApplicationCommandOptionChoices", { enumerable: 
 Object.defineProperty(exports, "ApplicationCommandOptionType", { enumerable: true, get: function () { return builder_1.ApplicationCommandOptionType; } });
 Object.defineProperty(exports, "ApplicationCommandOptions", { enumerable: true, get: function () { return builder_1.ApplicationCommandOptions; } });
 Object.defineProperty(exports, "CommandBuilder", { enumerable: true, get: function () { return builder_1.CommandBuilder; } });
-var interaction_1 = require("./interaction");
+const interaction_1 = require("./interaction");
 Object.defineProperty(exports, "Interaction", { enumerable: true, get: function () { return interaction_1.Interaction; } });
 Object.defineProperty(exports, "InteractionFactory", { enumerable: true, get: function () { return interaction_1.InteractionFactory; } });
