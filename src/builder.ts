@@ -25,7 +25,7 @@ export class CommandBuilder {
         this._command.name(name);
         return this;
     }
-    description(description): CommandBuilder {
+    description(description: string): CommandBuilder {
         this._command.description(description);
         return this;
     }
