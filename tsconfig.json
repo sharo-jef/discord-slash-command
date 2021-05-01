@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "typeRoots": [
+            "node_modules/@types",
+            "src/@types"
+        ],
+        "strictNullChecks": true,
+        "target": "ES2020",
+        "moduleResolution": "Node"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+}
