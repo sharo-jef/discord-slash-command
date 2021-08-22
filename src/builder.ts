@@ -1,16 +1,14 @@
-/* eslint-disable camelcase */
+import { ApplicationCommandOptionType } from './enums';
 
-import { ApplicationCommandOptionType } from './@types';
-
-export function builder(name: string): CommandBuilder {
-    const builder = new CommandBuilder(name);
+export function builder(name: string, description?: string): CommandBuilder {
+    const builder = new CommandBuilder(name, description);
     return builder;
 }
 
 export class CommandBuilder {
     private _command: ApplicationCommand;
-    constructor(name: string) {
-        this._command = new ApplicationCommand(name);
+    constructor(name: string, description?: string) {
+        this._command = new ApplicationCommand(name, description);
     }
     name(name: string): CommandBuilder {
         this._command.name(name);
@@ -20,8 +18,8 @@ export class CommandBuilder {
         this._command.description(description);
         return this;
     }
-    options(options: (options: ApplicationCommandOptions) => ApplicationCommandOptions): CommandBuilder {
-        this._command.options(options);
+    option(option: (option: ApplicationCommandOption) => ApplicationCommandOption): CommandBuilder {
+        this._command.option(option);
         return this;
     }
     defaultPermission(defaultPermission: boolean): CommandBuilder {
@@ -36,11 +34,11 @@ export class CommandBuilder {
 export class ApplicationCommand {
     private _name = '';
     private _description = '';
-    private _options: ApplicationCommandOptions;
+    private _options: ApplicationCommandOption[] = [];
     private _defaultPermission = true;
-    constructor(name: string) {
+    constructor(name: string, description?: string) {
         this.name(name);
-        this._description = '';
+        this._description = description ?? '';
     }
     name(name: string): ApplicationCommand {
         if (!/^[\w-]{1,32}$/g.test(name)) {
@@ -53,8 +51,8 @@ export class ApplicationCommand {
         this._description = description;
         return this;
     }
-    options(options: (options: ApplicationCommandOptions) => ApplicationCommandOptions): ApplicationCommand {
-        this._options = options(new ApplicationCommandOptions());
+    option(option: (option: ApplicationCommandOption) => ApplicationCommandOption): ApplicationCommand {
+        this._options.push(option(new ApplicationCommandOption()));
         return this;
     }
     defaultPermission(defaultPermission: boolean): ApplicationCommand {
@@ -73,28 +71,19 @@ export class ApplicationCommand {
             name: string,
             description: string,
             options: unknown,
+            /* eslint-disable-next-line camelcase */
             default_permission: boolean,
         };
         ret.name = this._name;
         ret.description = this._description;
-        if (this._options) {
-            ret.options = this._options.command;
+        if (this._options?.length) {
+            ret.options = this._options.map(o => o.command);
         }
         if (this._defaultPermission) {
+            /* eslint-disable-next-line camelcase */
             ret.default_permission = this._defaultPermission;
         }
         return ret;
-    }
-}
-
-export class ApplicationCommandOptions {
-    _options: ApplicationCommandOption[] = [];
-    option(option: (option: ApplicationCommandOption) => ApplicationCommandOption): ApplicationCommandOptions {
-        this._options.push(option(new ApplicationCommandOption()));
-        return this;
-    }
-    get command(): unknown[] {
-        return this._options.map(o => o.command);
     }
 }
 
@@ -103,8 +92,8 @@ export class ApplicationCommandOption {
     private _type: ApplicationCommandOptionType;
     private _description: string;
     private _required = false;
-    private _choices: ApplicationCommandOptionChoices;
-    private _options: ApplicationCommandOptions;
+    private _choices: ApplicationCommandOptionChoice[] = [];
+    private _options: ApplicationCommandOption[] = [];
     constructor(name = '') {
         if (name) {
             this.name(name);
@@ -129,12 +118,12 @@ export class ApplicationCommandOption {
         this._required = required;
         return this;
     }
-    choices(choices: (choices: ApplicationCommandOptionChoices) => ApplicationCommandOptionChoices): ApplicationCommandOption {
-        this._choices = choices(new ApplicationCommandOptionChoices());
+    choice(choice: (choice: ApplicationCommandOptionChoice) => ApplicationCommandOptionChoice): ApplicationCommandOption {
+        this._choices.push(choice(new ApplicationCommandOptionChoice()));
         return this;
     }
-    options(options: (options: ApplicationCommandOptions) => ApplicationCommandOptions): ApplicationCommandOption {
-        this._options = options(new ApplicationCommandOptions());
+    option(option: (option: ApplicationCommandOption) => ApplicationCommandOption): ApplicationCommandOption {
+        this._options.push(option(new ApplicationCommandOption()));
         return this;
     }
     get command(): unknown {
@@ -162,24 +151,13 @@ export class ApplicationCommandOption {
         if (this._required) {
             ret.required = this._required;
         }
-        if (this._choices) {
-            ret.choices = this._choices.command;
+        if (this._choices?.length) {
+            ret.choices = this._choices.map(c => c.command);
         }
-        if (this._options) {
-            ret.options = this._options.command;
+        if (this._options?.length) {
+            ret.options = this._options.map(o => o.command);
         }
         return ret;
-    }
-}
-
-export class ApplicationCommandOptionChoices {
-    private _choices: ApplicationCommandOptionChoice[] = [];
-    choice(choice: (choice: ApplicationCommandOptionChoice) => ApplicationCommandOptionChoice): ApplicationCommandOptionChoices {
-        this._choices.push(choice(new ApplicationCommandOptionChoice()));
-        return this;
-    }
-    get command(): unknown[] {
-        return this._choices.map(c => c.command);
     }
 }
 

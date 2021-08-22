@@ -4,7 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Interaction = exports.InteractionFactory = void 0;
+/* eslint-disable camelcase */
 const axios_1 = __importDefault(require("axios"));
+const enums_1 = require("./enums");
 class InteractionFactory {
     constructor(token) {
         this.token = token;
@@ -48,6 +50,22 @@ class Interaction {
     }
     get version() {
         return this.interaction.version;
+    }
+    get toSimple() {
+        function parse(option) {
+            const ret = {};
+            switch (option.type) {
+                case enums_1.ApplicationCommandOptionType.SUB_COMMAND:
+                case enums_1.ApplicationCommandOptionType.SUB_COMMAND_GROUP:
+                    for (const o of option?.options?.map(o => parse(o)) || []) {
+                        ret[o.name] = o.value;
+                    }
+                    return ret || { name: option.name };
+                default:
+                    return { name: option.name, value: option?.value };
+            }
+        }
+        return this.interaction.data.options?.map(o => parse(o));
     }
     async reply(content, options) {
         const contentString = `${options.mention
