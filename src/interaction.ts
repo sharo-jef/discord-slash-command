@@ -1,17 +1,83 @@
 import { default as axios } from 'axios';
 import { StringResolvable } from 'discord.js';
 
-import {
-    ApplicationCommandInteractionData,
-    ApplicationCommandIntegrationDataOption,
-    GuildMember,
-    InteractionObject,
-    InteractionReplyOptions,
-    InteractionType,
-    Snowflake,
-    User,
-    ApplicationCommandOptionType,
-} from './@types/index';
+import { ApplicationCommandOptionType, InteractionType, PremiumTypes, UserFlags } from './enums';
+
+export type Snowflake = string;
+
+
+export type ApplicationCommandInteractionData = {
+    id: Snowflake;
+    name: string;
+    resolved?: ApplicationCommandInteractionDataResolved;
+    options?: ApplicationCommandIntegrationDataOption[];
+};
+
+export type ApplicationCommandInteractionDataResolved = {
+    users: unknown[];
+    members: unknown[];
+    roles: unknown[];
+    channels: unknown[];
+};
+
+export type ApplicationCommandIntegrationDataOption = {
+    name: string;
+    type: number;
+    value?: unknown;  // OptionType;
+    options?: ApplicationCommandIntegrationDataOption[];
+};
+
+export type GuildMember = {
+    user?: User;
+    nick?: string;
+    roles: Snowflake[];
+    /* eslint-disable camelcase */
+    /**
+     * ISO8601 timestamp
+     */
+    joined_at: string;
+    /**
+     * ISO8601 timestamp
+     */
+    premium_since?: string;
+    deaf: boolean;
+    mute: boolean;
+    pending?: boolean;
+    permissions?: string;
+};
+
+export type User = {
+    id: Snowflake;
+    username: string;
+    discriminator: string;
+    avatar?: string;
+    bot?: boolean;
+    system?: boolean;
+    mfa_enabled?: boolean;
+    locale?: string;
+    verified?: boolean;
+    email?: string;
+    flags?: UserFlags;
+    premium_type?: PremiumTypes;
+    public_flags?: UserFlags;
+};
+
+export type InteractionObject = {
+    id: Snowflake;
+    application_id: Snowflake;
+    type: InteractionType;
+    data: ApplicationCommandInteractionData;
+    guild_id: Snowflake;
+    channel_id: Snowflake;
+    member: GuildMember;
+    user: User;
+    token: string;
+    version: number;
+};
+
+export type InteractionReplyOptions = {
+    mention: boolean;
+};
 
 export class InteractionFactory {
     private token: string;
